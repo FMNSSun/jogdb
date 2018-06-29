@@ -11,7 +11,7 @@ type DataStore interface {
 	Put(ns, doc string, v []byte) error
 
 	// Appends to the value associated with the namespace and document
-	// name while inserting the specified delimiter in front of the value
+	// name while inserting the specified delimiter after the value
 	// that is to be appended.
 	Append(ns, doc string, delim, v []byte) error
 
@@ -395,8 +395,8 @@ func (ds *MemDataStore) Append(ns, doc string, delim, v []byte) error {
 		ds.storage[ns] = nsV
 	}
 
-	nsV[doc] = append(nsV[doc], delim...)
 	nsV[doc] = append(nsV[doc], v...)
+	nsV[doc] = append(nsV[doc], delim...)
 
 	ds.mutex.Unlock()
 
