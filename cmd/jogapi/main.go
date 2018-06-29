@@ -6,16 +6,48 @@ import "net/http"
 import "github.com/gorilla/handlers"
 import "os"
 import "log"
+import "flag"
+import "bufio"
+import "fmt"
+import "strings"
 
 func main() {
+	configFile := flag.String("config","","Path to the configuration file.")
+
+	if *configFile == "" {
+		mainDefault()
+	} else {
+		log.Fatal("Config file not implemented yet!")
+	}
+}
+
+func readln(reader *bufio.Reader, msg string, args... interface{}) string {
+	fmt.Printf(msg, args...)	
+
+	line, err := reader.ReadString('\n')
+
+	if err != nil {
+		log.Fatalf("Reading secret failed: %v", err.Error())
+	}
+
+	return strings.Trim(line, "\r\t\n ")
+}
+
+func mainDefault() {
+	reader := bufio.NewReader(os.Stdin)
+
+	rootToken := readln(reader, "Root token [leave empty to generate new one]: ")
+
 	tg, err := libtoken.NewTokenGenerator("hex", 14)
 	
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	rootToken := tg.Generate()
-	rootToken = "dbd489bd16926ceafda8512c23cb"
+	if rootToken == "" {
+		rootToken = tg.Generate()
+	}
+
 	log.Printf("Root Token: %s", rootToken)
 
 	apiState := &ApiState{
