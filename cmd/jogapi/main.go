@@ -66,6 +66,6 @@ func mainDefault() {
 
 	apiRouter := NewAPI(apiState)
 
-	loggedRouter := handlers.LoggingHandler(os.Stdout, apiRouter)
+	loggedRouter := handlers.RecoveryHandler()(handlers.LoggingHandler(os.Stdout, apiRouter))
 	log.Fatal(http.ListenAndServe(":3000", loggedRouter))
 }
