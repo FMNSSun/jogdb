@@ -1,7 +1,7 @@
 package main
 
 import . "github.com/FMNSSun/jogdb"
-import "github.com/FMNSSun/libtoken"
+import "github.com/FMNSSun/rndstring"
 import "net/http"
 import "github.com/gorilla/handlers"
 import "os"
@@ -38,7 +38,7 @@ func mainDefault() {
 
 	rootToken := readln(reader, "Root token [leave empty to generate new one]: ")
 
-	tg, err := libtoken.NewTokenGenerator("hex", 14)
+	tg, err := rndstring.NewStringGenerator("hex", 14)
 	
 	if err != nil {
 		log.Fatal(err.Error())
@@ -61,7 +61,7 @@ func mainDefault() {
 		},
 		DefaultContentType: "application/octet-stream",
 		DataStore: NewMemDataStore(rootToken),
-		TokenGenerator: tg,
+		StringGenerator: tg,
 	}
 
 	apiRouter := NewAPI(apiState)

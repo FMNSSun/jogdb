@@ -5,18 +5,18 @@ import "net/http"
 import "io/ioutil"
 import "path/filepath"
 import "encoding/json"
-import "github.com/FMNSSun/libtoken"
+import "github.com/FMNSSun/rndstring"
 
 type ApiState struct {
 	ContentTypes map[string]string
 	DefaultContentType string
 	DataStore DataStore
-	TokenGenerator libtoken.TokenGenerator
+	StringGenerator rndstring.StringGenerator
 	Delimiters map[string][]byte
 }
 
 func (e *ApiState) generateToken() string {
-	return e.TokenGenerator.Generate()
+	return e.StringGenerator.Generate()
 }
 
 func getToken(r *http.Request) string {
